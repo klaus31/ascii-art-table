@@ -1,0 +1,14 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+version = '0.0.1'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile 'org.apache.commons:commons-lang3:3.0'
+
+  testCompile 'junit:junit:4.12'
+}
