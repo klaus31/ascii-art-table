@@ -86,26 +86,27 @@ public class AsciiArtTableUnitTest {
   }
 
   @Test
-  public void testNoHeaderColumnsButHeadlineWithPadding() {
+  public void testNoHeaderColumnsButHeadlineWithPaddingAndCustomBorders() {
     // when
     AsciiArtTable aat = new AsciiArtTable(3);
     aat.addHeadline("Some test headline");
     aat.setNoHeaderColumns(3);
     aat.add("bello", "pussy", "hans");
     aat.add(1, 2, 3., "a very long thing");
+    aat.setBorderCharacters("╭──╮││ ─││⎬⎨│╰─╯│");
     // have a visual impression (not part of the test)
     aat.print(System.out);
     // then
     String expected = "";
-    expected += "╔══════════════════════════════════════════════╗" + System.lineSeparator();
-    expected += "║   Some test headline                         ║" + System.lineSeparator();
-    expected += "╠═══════════════════════╤═══════════╤══════════╣" + System.lineSeparator();
-    expected += "║               bello   │   pussy   │   hans   ║" + System.lineSeparator();
-    expected += "╟───────────────────────┼───────────┼──────────╢" + System.lineSeparator();
-    expected += "║                   1   │       2   │    3.0   ║" + System.lineSeparator();
-    expected += "╟───────────────────────┼───────────┼──────────╢" + System.lineSeparator();
-    expected += "║   a very long thing   │           │          ║" + System.lineSeparator();
-    expected += "╚═══════════════════════╧═══════════╧══════════╝" + System.lineSeparator();
+    expected += "╭──────────────────────────────────────────────╮" + System.lineSeparator();
+    expected += "│   Some test headline                         │" + System.lineSeparator();
+    expected += "⎬──────────────────────────────────────────────⎨" + System.lineSeparator();
+    expected += "│               bello   │   pussy   │   hans   │" + System.lineSeparator();
+    expected += "│                       │           │          │" + System.lineSeparator();
+    expected += "│                   1   │       2   │    3.0   │" + System.lineSeparator();
+    expected += "│                       │           │          │" + System.lineSeparator();
+    expected += "│   a very long thing   │           │          │" + System.lineSeparator();
+    expected += "╰──────────────────────────────────────────────╯" + System.lineSeparator();
     assertEquals(expected, aat.getOutput());
   }
 
@@ -133,6 +134,31 @@ public class AsciiArtTableUnitTest {
     expected += "╟───────────────────┼───────┼──────╢" + System.lineSeparator();
     expected += "║ a very long thing │       │      ║" + System.lineSeparator();
     expected += "╚═══════════════════╧═══════╧══════╝" + System.lineSeparator();
+    assertEquals(expected, aat.getOutput());
+  }
+
+  @Test
+  public void testOtherBorders() {
+    // when
+    AsciiArtTable aat = new AsciiArtTable();
+    aat.addHeaderCols("some", "foo");
+    aat.addHeaderCols("bar");
+    aat.add("bello", "pussy", "hans");
+    aat.add(1, 2, 3., "a very long thing");
+    aat.setBorderCharacters("┏━┯┓┃┠─┬┨┿┣┫│┗┷┛┼");
+    // have a visual impression (not part of the test)
+    aat.print(System.out);
+    // then
+    String expected = "";
+    expected += "┏━━━━━━━━━━━━━━━━━━━┯━━━━━━━┯━━━━━━┓" + System.lineSeparator();
+    expected += "┃              some │   foo │  bar ┃" + System.lineSeparator();
+    expected += "┣━━━━━━━━━━━━━━━━━━━┿━━━━━━━┿━━━━━━┫" + System.lineSeparator();
+    expected += "┃             bello │ pussy │ hans ┃" + System.lineSeparator();
+    expected += "┠───────────────────┼───────┼──────┨" + System.lineSeparator();
+    expected += "┃                 1 │     2 │  3.0 ┃" + System.lineSeparator();
+    expected += "┠───────────────────┼───────┼──────┨" + System.lineSeparator();
+    expected += "┃ a very long thing │       │      ┃" + System.lineSeparator();
+    expected += "┗━━━━━━━━━━━━━━━━━━━┷━━━━━━━┷━━━━━━┛" + System.lineSeparator();
     assertEquals(expected, aat.getOutput());
   }
 

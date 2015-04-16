@@ -132,3 +132,43 @@ aat.setNoHeaderColumns(3);
 ║   a very long thing   │           │          ║
 ╚═══════════════════════╧═══════════╧══════════╝
 ```
+
+### other borders?
+
+just configure another hell of string:
+
+```
+AsciiArtTable aat = new AsciiArtTable();
+aat.setBorderCharacters("┏━┯┓┃┠─┬┨┿┣┫│┗┷┛┼");
+```
+
+```
+┏━━━━━━━━━━━━━━━━━━━┯━━━━━━━┯━━━━━━┓
+┃              some │   foo │  bar ┃
+┣━━━━━━━━━━━━━━━━━━━┿━━━━━━━┿━━━━━━┫
+┃             bello │ pussy │ hans ┃
+┠───────────────────┼───────┼──────┨
+┃                 1 │     2 │  3.0 ┃
+┠───────────────────┼───────┼──────┨
+┃ a very long thing │       │      ┃
+┗━━━━━━━━━━━━━━━━━━━┷━━━━━━━┷━━━━━━┛
+```
+
+... or ...
+```
+AsciiArtTable aat = new AsciiArtTable();
+aat.setBorderCharacters("╭──╮││ ─││⎬⎨│╰─╯│");
+```
+
+```
+╭──────────────────────────────────╮
+│              some │   foo │  bar │
+⎬───────────────────│───────│──────⎨
+│             bello │ pussy │ hans │
+│                   │       │      │
+│                 1 │     2 │  3.0 │
+│                   │       │      │
+│ a very long thing │       │      │
+╰──────────────────────────────────╯
+```
+(yes, I had the time of my life)

@@ -16,6 +16,7 @@ public class AsciiArtTable {
     return subject.toString();
   }
 
+  private String borderCharacters;
   private final List<Object> contentCols;
   private final List<Object> headerCols;
   private final List<Object> headlines;
@@ -26,10 +27,15 @@ public class AsciiArtTable {
   }
 
   public AsciiArtTable(final int padding) {
+    this(padding, "╔═╤╗║╟─┬╢╪╠╣│╚╧╝┼");
+  }
+
+  public AsciiArtTable(final int padding, final String borderCharacters) {
     this.headerCols = new ArrayList<>();
     this.contentCols = new ArrayList<>();
     this.headlines = new ArrayList<>();
     this.padding = padding;
+    this.borderCharacters = borderCharacters;
   }
 
   public void add(final List<Object> contentCols) {
@@ -84,34 +90,34 @@ public class AsciiArtTable {
     // build header
     String result = "";
     if (headlines.isEmpty()) {
-      result += row('╔', '═', '╤', '╗') + System.lineSeparator();
+      result += row(borderCharacters.charAt(0), borderCharacters.charAt(1), borderCharacters.charAt(2), borderCharacters.charAt(3)) + System.lineSeparator();
     } else {
-      result += row('╔', '═', '═', '╗') + System.lineSeparator();
+      result += row(borderCharacters.charAt(0), borderCharacters.charAt(1), borderCharacters.charAt(1), borderCharacters.charAt(3)) + System.lineSeparator();
       for (Object headline : headlines) {
-        result += rowHeadline(headline.toString(), '║', '║');
+        result += rowHeadline(headline.toString(), borderCharacters.charAt(4), borderCharacters.charAt(4));
         if (headlines.indexOf(headline) == headlines.size() - 1) {
           if (outputOfHeaderColsIsRequested()) {
-            result += row('╟', '─', '┬', '╢') + System.lineSeparator();
+            result += row(borderCharacters.charAt(5), borderCharacters.charAt(6), borderCharacters.charAt(7), borderCharacters.charAt(8)) + System.lineSeparator();
           } else {
-            result += row('╠', '═', '╤', '╣') + System.lineSeparator();
+            result += row(borderCharacters.charAt(10), borderCharacters.charAt(1), borderCharacters.charAt(2), borderCharacters.charAt(11)) + System.lineSeparator();
           }
         } else {
-          result += row('╟', '─', '─', '╢') + System.lineSeparator();
+          result += row(borderCharacters.charAt(5), borderCharacters.charAt(6), borderCharacters.charAt(6), borderCharacters.charAt(8)) + System.lineSeparator();
         }
       }
     }
     if (outputOfHeaderColsIsRequested()) {
-      result += line(headerCols, '║', '│', '║') + System.lineSeparator();
-      result += row('╠', '═', '╪', '╣') + System.lineSeparator();
+      result += line(headerCols, borderCharacters.charAt(4), borderCharacters.charAt(12), borderCharacters.charAt(4)) + System.lineSeparator();
+      result += row(borderCharacters.charAt(10), borderCharacters.charAt(1), borderCharacters.charAt(9), borderCharacters.charAt(11)) + System.lineSeparator();
     }
     int col = 0;
     while (col < contentCols.size()) {
-      result += line(contentCols.subList(col, col + headerCols.size()), '║', '│', '║') + System.lineSeparator();
+      result += line(contentCols.subList(col, col + headerCols.size()), borderCharacters.charAt(4), borderCharacters.charAt(12), borderCharacters.charAt(4)) + System.lineSeparator();
       col += headerCols.size();
       if (col == contentCols.size()) {
-        result += row('╚', '═', '╧', '╝') + System.lineSeparator();
+        result += row(borderCharacters.charAt(13), borderCharacters.charAt(1), borderCharacters.charAt(14), borderCharacters.charAt(15)) + System.lineSeparator();
       } else {
-        result += row('╟', '─', '┼', '╢') + System.lineSeparator();
+        result += row(borderCharacters.charAt(5), borderCharacters.charAt(6), borderCharacters.charAt(16), borderCharacters.charAt(8)) + System.lineSeparator();
       }
     }
     return result;
@@ -188,6 +194,10 @@ public class AsciiArtTable {
       result += left + StringUtils.repeat(' ', padding) + StringUtils.rightPad(headlineLine, tableLength - padding - 2) + right + System.lineSeparator();
     }
     return result;
+  }
+
+  public void setBorderCharacters(final String borderCharacters) {
+    this.borderCharacters = borderCharacters;
   }
 
   public void setNoHeaderColumns(int withColumns) {
