@@ -2,6 +2,8 @@
 
 a trivial way to print data to a table in ascii over java (without much configuration possibilities)
 
+### trivial case
+
 this ...
 
 ```java
@@ -27,7 +29,7 @@ aat.print(System.out);
 ╚═══════════════════╧═══════╧══════╝
 ```
     
-use of another padding:
+### use of another padding:
 
 ```java
 AsciiArtTable aat = new AsciiArtTable(5);
@@ -43,4 +45,53 @@ AsciiArtTable aat = new AsciiArtTable(5);
 ╟───────────────────────────┼───────────────┼──────────────╢
 ║     a very long thing     │               │              ║
 ╚═══════════════════════════╧═══════════════╧══════════════╝
+```
+
+### add a headline
+
+```java
+AsciiArtTable aat = new AsciiArtTable();
+aat.addHeadline("Some test headline");
+```
+
+```
+╔══════════════════════════════════╗
+║ Some test headline               ║
+╟───────────────────┬───────┬──────╢
+║              some │   foo │  bar ║
+╠═══════════════════╪═══════╪══════╣
+║             bello │ pussy │ hans ║
+╟───────────────────┼───────┼──────╢
+║                 1 │     2 │  3.0 ║
+╟───────────────────┼───────┼──────╢
+║ a very long thing │       │      ║
+╚═══════════════════╧═══════╧══════╝
+```
+
+### add many headlines
+
+```java
+AsciiArtTable aat = new AsciiArtTable();
+aat.addHeadline("Some test headline");
+aat.addHeadline("And a long explaining text, that may stop here");
+aat.addHeadline("or it will end up here.");
+```
+
+```
+╔══════════════════════════════════╗
+║ Some test headline               ║
+╟──────────────────────────────────╢
+║ And a long explaining text, that ║
+║ may stop here                    ║
+╟──────────────────────────────────╢
+║ or it will end up here.          ║
+╟───────────────────┬───────┬──────╢
+║              some │   foo │  bar ║
+╠═══════════════════╪═══════╪══════╣
+║             bello │ pussy │ hans ║
+╟───────────────────┼───────┼──────╢
+║                 1 │     2 │  3.0 ║
+╟───────────────────┼───────┼──────╢
+║ a very long thing │       │      ║
+╚═══════════════════╧═══════╧══════╝
 ```

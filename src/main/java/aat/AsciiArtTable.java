@@ -18,6 +18,7 @@ public class AsciiArtTable {
 
   private final List<Object> contentCols;
   private final List<Object> headerCols;
+  private final List<Object> headlines;
   private final int padding;
 
   public AsciiArtTable() {
@@ -27,6 +28,7 @@ public class AsciiArtTable {
   public AsciiArtTable(final int padding) {
     this.headerCols = new ArrayList<>();
     this.contentCols = new ArrayList<>();
+    this.headlines = new ArrayList<>();
     this.padding = padding;
   }
 
@@ -44,6 +46,15 @@ public class AsciiArtTable {
 
   public void addHeaderCols(final Object... headerCols) {
     addHeaderCols(new ArrayList<>(Arrays.asList(headerCols)));
+  }
+
+  public void addHeadline(final Object headline) {
+    this.headlines.add(headline);
+  }
+
+  public void clear() {
+    headerCols.clear();
+    contentCols.clear();
   }
 
   private int[] getColWidths() {
@@ -64,16 +75,48 @@ public class AsciiArtTable {
     return result;
   }
 
-  private String line(final char left, final char middle, final char columnSeparator, final char right) {
-    final int[] colWidths = getColWidths();
-    String result = left + "";
+  public String getOutput() {
+    // prepare data
+    while (contentCols.size() % headerCols.size() != 0) {
+      contentCols.add("");
+    }
+    // build header
+    String result = "";
+    if (headlines.isEmpty()) {
+      result += row('╔', '═', '╤', '╗') + System.lineSeparator();
+    } else {
+      result += row('╔', '═', '═', '╗') + System.lineSeparator();
+      for (Object headline : headlines) {
+        result += rowHeadline(headline.toString(), '║', '║');
+        if (headlines.indexOf(headline) == headlines.size() - 1) {
+          result += row('╟', '─', '┬', '╢') + System.lineSeparator();
+        } else {
+          result += row('╟', '─', '─', '╢') + System.lineSeparator();
+        }
+      }
+    }
+    result += line(headerCols, '║', '│', '║') + System.lineSeparator();
+    result += row('╠', '═', '╪', '╣') + System.lineSeparator();
     int col = 0;
-    while (col < headerCols.size()) {
-      result += StringUtils.repeat(middle, padding + colWidths[col] + padding);
-      col++;
-      result += col == headerCols.size() ? right : columnSeparator;
+    while (col < contentCols.size()) {
+      result += line(contentCols.subList(col, col + headerCols.size()), '║', '│', '║') + System.lineSeparator();
+      col += headerCols.size();
+      if (col == contentCols.size()) {
+        result += row('╚', '═', '╧', '╝') + System.lineSeparator();
+      } else {
+        result += row('╟', '─', '┼', '╢') + System.lineSeparator();
+      }
     }
     return result;
+  }
+
+  private int getTableLength() {
+    final int[] colWidths = getColWidths();
+    int result = 0;
+    for (int colWidth : colWidths) {
+      result += colWidth + 2 * padding;
+    }
+    return result + colWidths.length + 1;
   }
 
   private String line(final List<Object> contents, final char left, final char columnSeparator, final char right) {
@@ -89,29 +132,44 @@ public class AsciiArtTable {
     return result;
   }
 
-  public void print(final PrintStream out) {
-    out.print(toString());
+  public void print(final PrintStream printStream) {
+    printStream.print(getOutput());
   }
 
-  @Override
-  public String toString() {
-    // prepare data
-    while (contentCols.size() % headerCols.size() != 0) {
-      contentCols.add("");
-    }
-    // build header
-    String result = line('╔', '═', '╤', '╗') + System.lineSeparator();
-    result += line(headerCols, '║', '│', '║') + System.lineSeparator();
-    result += line('╠', '═', '╪', '╣') + System.lineSeparator();
+  private String row(final char left, final char middle, final char columnSeparator, final char right) {
+    final int[] colWidths = getColWidths();
+    String result = left + "";
     int col = 0;
-    while (col < contentCols.size()) {
-      result += line(contentCols.subList(col, col + headerCols.size()), '║', '│', '║') + System.lineSeparator();
-      col += headerCols.size();
-      if (col == contentCols.size()) {
-        result += line('╚', '═', '╧', '╝') + System.lineSeparator();
-      } else {
-        result += line('╟', '─', '┼', '╢') + System.lineSeparator();
+    while (col < headerCols.size()) {
+      result += StringUtils.repeat(middle, padding + colWidths[col] + padding);
+      col++;
+      result += col == headerCols.size() ? right : columnSeparator;
+    }
+    return result;
+  }
+
+  private String rowHeadline(final String headline, final char left, final char right) {
+    final int tableLength = getTableLength();
+    final int contentWidth = tableLength - (2 * padding);
+    // FIXME a single word could be longer than the table
+    // split into headline rows
+    final List<String> headlineLines = new ArrayList<>();
+    final String[] headlineWords = headline.split(" ");
+    List<String> rowWords = new ArrayList<>();
+    for (int index = 0; index < headlineWords.length; index++) {
+      if (index + 1 != headlineWords.length && StringUtils.join(rowWords, ' ').length() + 1 + headlineWords[index + 1].length() >= contentWidth) {
+        headlineLines.add(StringUtils.join(rowWords, ' '));
+        rowWords.clear();
       }
+      rowWords.add(headlineWords[index]);
+    }
+    if (!rowWords.isEmpty()) {
+      headlineLines.add(StringUtils.join(rowWords, ' '));
+    }
+    // build result
+    String result = "";
+    for (String headlineLine : headlineLines) {
+      result += left + StringUtils.repeat(' ', padding) + StringUtils.rightPad(headlineLine, tableLength - padding - 2) + right + System.lineSeparator();
     }
     return result;
   }
