@@ -95,3 +95,40 @@ aat.addHeadline("or it will end up here.");
 ║ a very long thing │       │      ║
 ╚═══════════════════╧═══════╧══════╝
 ```
+
+### no header columns
+
+```java
+AsciiArtTable aat = new AsciiArtTable();
+aat.setNoHeaderColumns(3);
+```
+
+```
+╔═══════════════════╤═══════╤══════╗
+║             bello │ pussy │ hans ║
+╟───────────────────┼───────┼──────╢
+║                 1 │     2 │  3.0 ║
+╟───────────────────┼───────┼──────╢
+║ a very long thing │       │      ║
+╚═══════════════════╧═══════╧══════╝
+```
+
+### no header columns but headline with padding
+
+```java
+AsciiArtTable aat = new AsciiArtTable(3);
+aat.addHeadline("Some test headline");
+aat.setNoHeaderColumns(3);
+```
+
+```
+╔══════════════════════════════════════════════╗
+║   Some test headline                         ║
+╠═══════════════════════╤═══════════╤══════════╣
+║               bello   │   pussy   │   hans   ║
+╟───────────────────────┼───────────┼──────────╢
+║                   1   │       2   │    3.0   ║
+╟───────────────────────┼───────────┼──────────╢
+║   a very long thing   │           │          ║
+╚═══════════════════════╧═══════════╧══════════╝
+```

@@ -55,6 +55,7 @@ public class AsciiArtTable {
   public void clear() {
     headerCols.clear();
     contentCols.clear();
+    headlines.clear();
   }
 
   private int[] getColWidths() {
@@ -89,14 +90,20 @@ public class AsciiArtTable {
       for (Object headline : headlines) {
         result += rowHeadline(headline.toString(), '║', '║');
         if (headlines.indexOf(headline) == headlines.size() - 1) {
-          result += row('╟', '─', '┬', '╢') + System.lineSeparator();
+          if (outputOfHeaderColsIsRequested()) {
+            result += row('╟', '─', '┬', '╢') + System.lineSeparator();
+          } else {
+            result += row('╠', '═', '╤', '╣') + System.lineSeparator();
+          }
         } else {
           result += row('╟', '─', '─', '╢') + System.lineSeparator();
         }
       }
     }
-    result += line(headerCols, '║', '│', '║') + System.lineSeparator();
-    result += row('╠', '═', '╪', '╣') + System.lineSeparator();
+    if (outputOfHeaderColsIsRequested()) {
+      result += line(headerCols, '║', '│', '║') + System.lineSeparator();
+      result += row('╠', '═', '╪', '╣') + System.lineSeparator();
+    }
     int col = 0;
     while (col < contentCols.size()) {
       result += line(contentCols.subList(col, col + headerCols.size()), '║', '│', '║') + System.lineSeparator();
@@ -132,6 +139,15 @@ public class AsciiArtTable {
     return result;
   }
 
+  private boolean outputOfHeaderColsIsRequested() {
+    for (Object headerCol : headerCols) {
+      if (headerCol.toString().length() > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public void print(final PrintStream printStream) {
     printStream.print(getOutput());
   }
@@ -150,14 +166,14 @@ public class AsciiArtTable {
 
   private String rowHeadline(final String headline, final char left, final char right) {
     final int tableLength = getTableLength();
-    final int contentWidth = tableLength - (2 * padding);
+    final int contentWidth = tableLength - (2 * padding) - 2;
     // FIXME a single word could be longer than the table
     // split into headline rows
     final List<String> headlineLines = new ArrayList<>();
     final String[] headlineWords = headline.split(" ");
     List<String> rowWords = new ArrayList<>();
     for (int index = 0; index < headlineWords.length; index++) {
-      if (index + 1 != headlineWords.length && StringUtils.join(rowWords, ' ').length() + 1 + headlineWords[index + 1].length() >= contentWidth) {
+      if (index + 1 != headlineWords.length && (StringUtils.join(rowWords, ' ') + ' ' + headlineWords[index]).length() > contentWidth) {
         headlineLines.add(StringUtils.join(rowWords, ' '));
         rowWords.clear();
       }
@@ -172,5 +188,12 @@ public class AsciiArtTable {
       result += left + StringUtils.repeat(' ', padding) + StringUtils.rightPad(headlineLine, tableLength - padding - 2) + right + System.lineSeparator();
     }
     return result;
+  }
+
+  public void setNoHeaderColumns(int withColumns) {
+    this.headerCols.clear();
+    while (withColumns-- > 0) {
+      this.headerCols.add("");
+    }
   }
 }
