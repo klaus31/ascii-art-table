@@ -137,7 +137,7 @@ aat.setNoHeaderColumns(3);
 
 just configure another hell of string:
 
-```
+```java
 AsciiArtTable aat = new AsciiArtTable();
 aat.setBorderCharacters("┏━┯┓┃┠─┬┨┿┣┫│┗┷┛┼");
 ```
@@ -155,7 +155,8 @@ aat.setBorderCharacters("┏━┯┓┃┠─┬┨┿┣┫│┗┷┛┼");
 ```
 
 ... or ...
-```
+
+```java
 AsciiArtTable aat = new AsciiArtTable();
 aat.setBorderCharacters("╭──╮││ ─││⎬⎨│╰─╯│");
 ```
@@ -172,3 +173,32 @@ aat.setBorderCharacters("╭──╮││ ─││⎬⎨│╰─╯│");
 ╰──────────────────────────────────╯
 ```
 (yes, I had the time of my life)
+
+#### border helper
+
+if you want to design your own table borders, do not lose track and do something like ...
+
+```java
+AsciiArtTable aat = new AsciiArtTable();
+aat.addHeadline(" - ");
+aat.addHeadline(" - ");
+aat.addHeaderCols(" - ", " - ", " - ");
+aat.addHeaderCols();
+aat.add("   ", "   ", "   ");
+aat.add("   ", "   ", "   ");
+aat.setBorderCharacters("ABCDEFGHIJKLMNOPQ");
+```
+
+```
+ABBBBBBBBBBBBBBBBBD
+E  -              E
+FGGGGGGGGGGGGGGGGGI
+E  -              E
+FGGGGGGGGGGGGGGGGGI
+E  -  M  -  M  -  E
+KBBBBBJBBBBBJBBBBBL
+E     M     M     E
+FGGGGGQGGGGGQGGGGGI
+E     M     M     E
+NBBBBBOBBBBBOBBBBBP
+```

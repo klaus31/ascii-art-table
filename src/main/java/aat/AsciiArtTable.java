@@ -10,10 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 public class AsciiArtTable {
 
   private static String prependToLength(final Object subject, final int length) {
-    if (subject.toString().length() < length) {
-      return StringUtils.repeat(' ', length - subject.toString().length()) + subject;
+    final String subjectString = subject == null ? "" : subject.toString();
+    if (subjectString.length() < length) {
+      return StringUtils.repeat(' ', length - subjectString.length()) + subjectString;
     }
-    return subject.toString();
+    return subjectString.toString();
   }
 
   private String borderCharacters;
@@ -74,7 +75,8 @@ public class AsciiArtTable {
     int index = 0;
     while (index < contentCols.size()) {
       col = index % headerCols.size();
-      if (contentCols.get(index).toString().length() > result[col]) {
+      final String content = contentCols.get(index) == null ? "" : contentCols.get(index).toString();
+      if (content.length() > result[col]) {
         result[col] = contentCols.get(index).toString().length();
       }
       index++;
