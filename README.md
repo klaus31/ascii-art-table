@@ -33,6 +33,7 @@ aat.print(System.out);
 
 ```java
 AsciiArtTable aat = new AsciiArtTable(5);
+[...]
 ```
 
 ```
@@ -52,6 +53,7 @@ AsciiArtTable aat = new AsciiArtTable(5);
 ```java
 AsciiArtTable aat = new AsciiArtTable();
 aat.addHeadline("Some test headline");
+[...]
 ```
 
 ```
@@ -75,6 +77,7 @@ AsciiArtTable aat = new AsciiArtTable();
 aat.addHeadline("Some test headline");
 aat.addHeadline("And a long explaining text, that may stop here");
 aat.addHeadline("or it will end up here.");
+[...]
 ```
 
 ```
@@ -101,6 +104,7 @@ aat.addHeadline("or it will end up here.");
 ```java
 AsciiArtTable aat = new AsciiArtTable();
 aat.setNoHeaderColumns(3);
+[...]
 ```
 
 ```
@@ -119,6 +123,7 @@ aat.setNoHeaderColumns(3);
 AsciiArtTable aat = new AsciiArtTable(3);
 aat.addHeadline("Some test headline");
 aat.setNoHeaderColumns(3);
+[...]
 ```
 
 ```
@@ -140,6 +145,7 @@ just configure another hell of string:
 ```java
 AsciiArtTable aat = new AsciiArtTable();
 aat.setBorderCharacters("┏━┯┓┃┠─┬┨┿┣┫│┗┷┛┼");
+[...]
 ```
 
 ```
@@ -159,6 +165,7 @@ aat.setBorderCharacters("┏━┯┓┃┠─┬┨┿┣┫│┗┷┛┼");
 ```java
 AsciiArtTable aat = new AsciiArtTable();
 aat.setBorderCharacters("╭──╮││ ─││⎬⎨│╰─╯│");
+[...]
 ```
 
 ```
@@ -187,6 +194,7 @@ aat.addHeaderCols();
 aat.add("   ", "   ", "   ");
 aat.add("   ", "   ", "   ");
 aat.setBorderCharacters("ABCDEFGHIJKLMNOPQ");
+[...]
 ```
 
 ```
@@ -201,4 +209,34 @@ E     M     M     E
 FGGGGGQGGGGGQGGGGGI
 E     M     M     E
 NBBBBBOBBBBBOBBBBBP
+```
+
+### multi lines in a cell?
+
+by default, the lines are separated after 80 characters (known bug if a single word is larger). you can change this by:
+
+```java
+AsciiArtTable aat = new AsciiArtTable();
+aat.setMaxColumnWidth(25);
+[...]
+```
+
+```
+╔═══════════════════════════╤═══════╤═══════════════════════════╗
+║                      some │   foo │                       bar ║
+╠═══════════════════════════╪═══════╪═══════════════════════════╣
+║                         a │     b │ Lorem ipsum dolor sit     ║
+║                           │       │ amet, consetetur          ║
+║                           │       │ sadipscing elitr, sed     ║
+║                           │       │ diam nonumy eirmod tempor ║
+║                           │       │ invidunt ut labore et     ║
+║                           │       │ dolore magna aliquyam     ║
+║                           │       │ erat, sed diam voluptua.  ║
+╟───────────────────────────┼───────┼───────────────────────────╢
+║                         1 │ cdefg │                       3.0 ║
+╟───────────────────────────┼───────┼───────────────────────────╢
+║ Lorem ipsum dolor sit     │       │                           ║
+║ amet, consetetur          │       │                           ║
+║ sadipscing elitr          │       │                           ║
+╚═══════════════════════════╧═══════╧═══════════════════════════╝    
 ```

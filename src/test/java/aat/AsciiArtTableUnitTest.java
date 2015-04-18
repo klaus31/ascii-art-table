@@ -31,6 +31,39 @@ public class AsciiArtTableUnitTest {
   }
 
   @Test
+  public void testLineSeparationOnLongInputs() {
+    // when
+    AsciiArtTable aat = new AsciiArtTable();
+    aat.addHeaderCols("some", "foo");
+    aat.addHeaderCols("bar");
+    aat.add("a", "b", "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+    aat.add(1, "cdefg", 3., "Lorem ipsum dolor sit amet, consetetur sadipscing elitr");
+    aat.setMaxColumnWidth(25);
+    // have a visual impression (not part of the test)
+    aat.print(System.out);
+    // then
+    String expected = "";
+    expected += "╔═══════════════════════════╤═══════╤═══════════════════════════╗" + System.lineSeparator();
+    expected += "║                      some │   foo │                       bar ║" + System.lineSeparator();
+    expected += "╠═══════════════════════════╪═══════╪═══════════════════════════╣" + System.lineSeparator();
+    expected += "║                         a │     b │ Lorem ipsum dolor sit     ║" + System.lineSeparator();
+    expected += "║                           │       │ amet, consetetur          ║" + System.lineSeparator();
+    expected += "║                           │       │ sadipscing elitr, sed     ║" + System.lineSeparator();
+    expected += "║                           │       │ diam nonumy eirmod tempor ║" + System.lineSeparator();
+    expected += "║                           │       │ invidunt ut labore et     ║" + System.lineSeparator();
+    expected += "║                           │       │ dolore magna aliquyam     ║" + System.lineSeparator();
+    expected += "║                           │       │ erat, sed diam voluptua.  ║" + System.lineSeparator();
+    expected += "╟───────────────────────────┼───────┼───────────────────────────╢" + System.lineSeparator();
+    expected += "║                         1 │ cdefg │                       3.0 ║" + System.lineSeparator();
+    expected += "╟───────────────────────────┼───────┼───────────────────────────╢" + System.lineSeparator();
+    expected += "║ Lorem ipsum dolor sit     │       │                           ║" + System.lineSeparator();
+    expected += "║ amet, consetetur          │       │                           ║" + System.lineSeparator();
+    expected += "║ sadipscing elitr          │       │                           ║" + System.lineSeparator();
+    expected += "╚═══════════════════════════╧═══════╧═══════════════════════════╝" + System.lineSeparator();
+    assertEquals(expected, aat.getOutput());
+  }
+
+  @Test
   public void testManyHeadlines() {
     // when
     AsciiArtTable aat = new AsciiArtTable();
