@@ -30,6 +30,7 @@ public class AsciiArtTable {
   private final List<Object> headerCols;
   private final List<Object> headlines;
   private int maxColumnWidth = 80;
+  private boolean minimiseHeight = false;
   private final int padding;
 
   public AsciiArtTable() {
@@ -129,7 +130,7 @@ public class AsciiArtTable {
           } else {
             result += row(borderCharacters.charAt(10), borderCharacters.charAt(1), borderCharacters.charAt(2), borderCharacters.charAt(11)) + System.lineSeparator();
           }
-        } else {
+        } else if (!minimiseHeight) {
           result += row(borderCharacters.charAt(5), borderCharacters.charAt(6), borderCharacters.charAt(6), borderCharacters.charAt(8)) + System.lineSeparator();
         }
       }
@@ -144,7 +145,7 @@ public class AsciiArtTable {
       col += headerCols.size();
       if (col == contentCols.size()) {
         result += row(borderCharacters.charAt(13), borderCharacters.charAt(1), borderCharacters.charAt(14), borderCharacters.charAt(15)) + System.lineSeparator();
-      } else {
+      } else if (!minimiseHeight) {
         result += row(borderCharacters.charAt(5), borderCharacters.charAt(6), borderCharacters.charAt(16), borderCharacters.charAt(8)) + System.lineSeparator();
       }
     }
@@ -158,6 +159,10 @@ public class AsciiArtTable {
       result += colWidth + 2 * padding;
     }
     return result + colWidths.length + 1;
+  }
+
+  public void minimiseHeight() {
+    minimiseHeight = true;
   }
 
   private boolean outputOfHeaderColsIsRequested() {

@@ -240,3 +240,24 @@ aat.setMaxColumnWidth(25);
 ║ sadipscing elitr          │       │                           ║
 ╚═══════════════════════════╧═══════╧═══════════════════════════╝    
 ```
+
+### minimize height
+
+
+```java
+AsciiArtTable aat = new AsciiArtTable();
+aat.minimiseHeight();
+[...]
+```
+
+```
+╔══════════════════════════════════╗
+║ Some test headline               ║
+╟───────────────────┬───────┬──────╢
+║              some │   foo │  bar ║
+╠═══════════════════╪═══════╪══════╣
+║             bello │ pussy │ hans ║
+║                 1 │     2 │  3.0 ║
+║ a very long thing │       │      ║
+╚═══════════════════╧═══════╧══════╝
+```

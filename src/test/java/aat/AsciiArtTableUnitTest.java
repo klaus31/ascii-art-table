@@ -98,6 +98,37 @@ public class AsciiArtTableUnitTest {
   }
 
   @Test
+  public void testManyMinimiseHeight() {
+    // when
+    AsciiArtTable aat = new AsciiArtTable();
+    aat.addHeadline("Some test headline");
+    aat.addHeadline("And a long explaining text, that may stop here");
+    aat.addHeadline("or it will end up here.");
+    aat.addHeaderCols("some", "foo");
+    aat.addHeaderCols("bar");
+    aat.add("bello", "pussy", "hans");
+    aat.minimiseHeight();
+    aat.add(1, 2, 3., "a very long thing");
+    // have a visual impression (not part of the test)
+    aat.print(System.out);
+    // then
+    String expected = "";
+    expected += "╔══════════════════════════════════╗" + System.lineSeparator();
+    expected += "║ Some test headline               ║" + System.lineSeparator();
+    expected += "║ And a long explaining text, that ║" + System.lineSeparator();
+    expected += "║ may stop here                    ║" + System.lineSeparator();
+    expected += "║ or it will end up here.          ║" + System.lineSeparator();
+    expected += "╟───────────────────┬───────┬──────╢" + System.lineSeparator();
+    expected += "║              some │   foo │  bar ║" + System.lineSeparator();
+    expected += "╠═══════════════════╪═══════╪══════╣" + System.lineSeparator();
+    expected += "║             bello │ pussy │ hans ║" + System.lineSeparator();
+    expected += "║                 1 │     2 │  3.0 ║" + System.lineSeparator();
+    expected += "║ a very long thing │       │      ║" + System.lineSeparator();
+    expected += "╚═══════════════════╧═══════╧══════╝" + System.lineSeparator();
+    assertEquals(expected, aat.getOutput());
+  }
+
+  @Test
   public void testNoHeaderColumns() {
     // when
     AsciiArtTable aat = new AsciiArtTable();
